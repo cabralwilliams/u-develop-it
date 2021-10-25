@@ -31,7 +31,7 @@ app.get('/', (req, res) => {
 });
 
 app.get('/api/candidates', (req,res) => {
-    const query = `SELECT * FROM candidates`;
+    const query = `SELECT candidates.*, parties.name AS party_name FROM candidates LEFT JOIN parties ON candidates.party_id = parties.id`;
     db.query(query, (err, rows) => {
         if(err) {
             res.status(500).json({ error: err.message });
@@ -46,7 +46,7 @@ app.get('/api/candidates', (req,res) => {
 
 app.get('/api/candidate/:id', (req,res) => {
     const cID = req.params.id;
-    const query = `SELECT * FROM candidates WHERE id = ?`;
+    const query = `SELECT candidates.*, parties.name AS party_name FROM candidates LEFT JOIN parties ON candidates.party_id = parties.id WHERE candidates.id = ?`;
     db.query(query,[cID],(err,row) => {
         if(err) {
             res.status(400).json({ error: err.message });
